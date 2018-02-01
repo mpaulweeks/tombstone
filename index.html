@@ -1,0 +1,154 @@
+<html>
+<head>
+  <title>Tombstone Generator</title>
+  <link rel="shortcut icon" href="favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      width: 100%;
+      margin: 0 auto;
+    }
+    textarea, input, button {
+      border: 1px solid black;
+    }
+    .row {
+      width: 100%;
+      padding: 5px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .column {
+      padding: 0px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .input-container {
+      padding-bottom: 3px;
+    }
+    .title {
+      font-size: 24pt;
+    }
+    #text {
+      width: 200px;
+      height: 100px;
+    }
+    #download {
+      display: none;
+    }
+    #save {
+      font-size: 20px;
+      cursor: pointer;
+      color: black;
+      background-color: white;
+    }
+    #save:hover {
+      color: white;
+      background-color: black;
+    }
+    #canvas {
+      max-width: 100%;
+      height: auto;
+    }
+    @media (max-width: 400px){
+      .column {
+        text-align: center;
+        width: 100%;
+        padding-bottom: 10px;
+      }
+    }
+  </style>
+<body>
+  <div class="row">
+    <div class="title">
+      Tombstone Generator
+    </div>
+  </div>
+  <div class="row">
+    <div class="column">
+      <div>
+        Text on Tombstone
+      </div>
+      <div>
+        <textarea id="text"></textarea>
+      </div>
+    </div>
+    <div class="column">
+      <div>
+        Font size
+      </div>
+      <div class="input-container">
+        <input id="fontSize" placeholder="eg: 48" value="48"/>
+      </div>
+      <div>
+        Gap between lines
+      </div>
+      <div class="input-container">
+        <input id="gap" placeholder="eg: 0" value="0"/>
+      </div>
+      <div>
+        Buffer from top
+      </div>
+      <div class="input-container">
+        <input id="buffer" placeholder="eg: 200" value="200"/>
+      </div>
+    </div>
+    <div class="column">
+      <a id="download" download="tombstone.png"></a>
+      <div>
+        <button id="save">Save Image</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <script>
+
+    const url = 'tombstone.jpg';
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    const textArea = document.getElementById("text");
+    const download = document.getElementById("download");
+
+    function paint() {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      const center = canvas.width / 2;
+      const fontSize = parseInt(document.getElementById("fontSize").value);
+      const buffer = parseInt(document.getElementById("buffer").value);
+      const gap = parseInt(document.getElementById("gap").value);
+
+      ctx.textAlign = "center";
+      ctx.font = fontSize + 'px serif';
+      textArea.value.split('\n').forEach((line, i) => {
+        ctx.fillText(line, center, buffer + (i * (gap + fontSize)));
+      })
+    }
+
+    img.onload = paint;
+    img.src = url;
+
+    textArea.value = 'RIP\nyour name here\n\n\n1980 - now';
+    document.addEventListener('input', function(e){
+      if (e.target.matches('input,textarea')) {
+        e.stopPropagation();
+        paint();
+      }
+    });
+
+    document.getElementById('save').addEventListener('click', () => {
+      var dt = canvas.toDataURL("image/png");
+      download.href = dt;
+      download.click();
+    });
+
+  </script>
+</body>
+</html>
