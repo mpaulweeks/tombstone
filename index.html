@@ -85,7 +85,7 @@ your name here
         Font size
       </div>
       <div class="input-container">
-        <input id="font-size" placeholder="eg: 48" value="48"/>
+        <input id="font-size" placeholder="eg: 50" value="50"/>
       </div>
       <div>
         Gap between lines
@@ -156,6 +156,7 @@ your name here
       ctx.drawImage(img, 0, 0);
 
       const center = elmCanvas.width / 2;
+      const color = '#000000';
       const fontSize = parseInt(document.getElementById("font-size").value);
       const bufferSize = parseInt(document.getElementById("buffer-size").value);
       const gapSize = parseInt(document.getElementById("gap-size").value);
@@ -166,6 +167,8 @@ your name here
       ctx.textAlign = "center";
       ctx.font = `${fontWeight} ${fontSize}px ${fontStyle}`;
       ctx.lineWidth = 1;
+      ctx.fillStyle = color;
+      ctx.strokeStyle = color;
 
       elmTextArea.value.split('\n').forEach((line, i) => {
         const yOffset = bufferSize + (i * (gapSize + fontSize));
