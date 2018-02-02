@@ -108,24 +108,24 @@ your name here
     </div>
   </div>
   <div class="row">
-    <canvas id="canvas"></canvas>
+    <canvas id="cvas"></canvas>
   </div>
 
   <script>
 
     const url = 'tombstone.jpg';
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
+    const cvas = document.getElementById("cvas");
+    const ctx = cvas.getContext("2d");
     const img = new Image();
     const textArea = document.getElementById("text");
     const download = document.getElementById("download");
 
     function paint() {
-      canvas.width = img.width;
-      canvas.height = img.height;
+      cvas.width = img.width;
+      cvas.height = img.height;
       ctx.drawImage(img, 0, 0);
 
-      const center = canvas.width / 2;
+      const center = cvas.width / 2;
       const fontSize = parseInt(document.getElementById("fontSize").value);
       const buffer = parseInt(document.getElementById("buffer").value);
       const gap = parseInt(document.getElementById("gap").value);
@@ -148,7 +148,7 @@ your name here
     });
 
     document.getElementById('save').addEventListener('click', () => {
-      var dt = canvas.toDataURL("image/png");
+      var dt = cvas.toDataURL("image/png");
       download.href = dt;
       download.click();
     });
