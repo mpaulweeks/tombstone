@@ -8,7 +8,7 @@
       width: 100%;
       margin: 0 auto;
     }
-    textarea, input, button {
+    textarea, input, button, select {
       border: 1px solid black;
     }
     .row {
@@ -101,7 +101,38 @@ your name here
       </div>
     </div>
     <div class="column">
-      <a id="download-link" download="tombstone.png"></a>
+      <div>
+        Font Style
+      </div>
+      <div class="input-container">
+        <select id="font-style">
+          <option value="Times">Times</option>
+          <option value="Arial">Arial</option>
+          <option value="Helvetica">Helvetica</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Courier">Courier</option>
+          <option value="Verdana">Verdana</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Palatino">Palatino</option>
+          <option value="Garamond">Garamond</option>
+          <option value="Bookman">Bookman</option>
+          <option value="Comic Sans MS">Comic Sans MS</option>
+          <option value="Trebuchet MS">Trebuchet MS</option>
+          <option value="Arial Black">Arial Black</option>
+          <option value="Impact">Impact</option>
+        </select>
+      </div>
+      <div>
+        Is Outline?
+        <input id="font-is-outline" type="checkbox"/>
+      </div>
+      <div>
+        Is Bold?
+        <input id="font-is-bold" type="checkbox"/>
+      </div>
+    </div>
+    <div class="column">
       <div>
         <button id="save-button">Save Image</button>
       </div>
@@ -110,6 +141,7 @@ your name here
   <div class="row">
     <canvas id="canvas"></canvas>
   </div>
+  <a id="download-link" download="tombstone.png"></a>
 
   <script>
 
@@ -127,12 +159,22 @@ your name here
       const fontSize = parseInt(document.getElementById("font-size").value);
       const bufferSize = parseInt(document.getElementById("buffer-size").value);
       const gapSize = parseInt(document.getElementById("gap-size").value);
+      const fontStyle = document.getElementById("font-style").value;
+      const fontIsOutline = document.getElementById("font-is-outline").checked;
+      const fontWeight = document.getElementById("font-is-bold").checked ? 'bold' : 'normal';
 
       ctx.textAlign = "center";
-      ctx.font = fontSize + 'px serif';
+      ctx.font = `${fontWeight} ${fontSize}px ${fontStyle}`;
+      ctx.lineWidth = 1;
+
       elmTextArea.value.split('\n').forEach((line, i) => {
-        ctx.fillText(line, center, bufferSize + (i * (gapSize + fontSize)));
-      })
+        const yOffset = bufferSize + (i * (gapSize + fontSize));
+        if (fontIsOutline){
+          ctx.strokeText(line, center, yOffset);
+        } else {
+          ctx.fillText(line, center, yOffset);
+        }
+      });
     }
 
     img.onload = paint;
@@ -140,6 +182,12 @@ your name here
 
     document.addEventListener('input', e => {
       if (e.target.matches('input,textarea')) {
+        e.stopPropagation();
+        paint();
+      }
+    });
+    document.addEventListener('change', e => {
+      if (e.target.matches('select,input[type=checkbox]')) {
         e.stopPropagation();
         paint();
       }
