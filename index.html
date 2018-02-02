@@ -35,16 +35,16 @@
       width: 200px;
       height: 100px;
     }
-    #download {
+    #download-link {
       display: none;
     }
-    #save {
+    #save-button {
       font-size: 20px;
       cursor: pointer;
       color: black;
       background-color: white;
     }
-    #save:hover {
+    #save-button:hover {
       color: white;
       background-color: black;
     }
@@ -85,25 +85,25 @@ your name here
         Font size
       </div>
       <div class="input-container">
-        <input id="fontSize" placeholder="eg: 48" value="48"/>
+        <input id="font-size" placeholder="eg: 48" value="48"/>
       </div>
       <div>
         Gap between lines
       </div>
       <div class="input-container">
-        <input id="gap" placeholder="eg: 0" value="0"/>
+        <input id="gap-size" placeholder="eg: 0" value="0"/>
       </div>
       <div>
         Buffer from top
       </div>
       <div class="input-container">
-        <input id="buffer" placeholder="eg: 200" value="200"/>
+        <input id="buffer-size" placeholder="eg: 200" value="200"/>
       </div>
     </div>
     <div class="column">
-      <a id="download" download="tombstone.png"></a>
+      <a id="download-link" download="tombstone.png"></a>
       <div>
-        <button id="save">Save Image</button>
+        <button id="save-button">Save Image</button>
       </div>
     </div>
   </div>
@@ -113,44 +113,43 @@ your name here
 
   <script>
 
-    const url = 'tombstone.jpg';
-    const cvas = document.getElementById("canvas");
-    const ctx = cvas.getContext("2d");
+    const elmTextArea = document.getElementById("text");
+    const elmCanvas = document.getElementById("canvas");
+    const ctx = elmCanvas.getContext("2d");
     const img = new Image();
-    const textArea = document.getElementById("text");
-    const download = document.getElementById("download");
 
     function paint() {
-      cvas.width = img.width;
-      cvas.height = img.height;
+      elmCanvas.width = img.width;
+      elmCanvas.height = img.height;
       ctx.drawImage(img, 0, 0);
 
-      const center = cvas.width / 2;
-      const fontSize = parseInt(document.getElementById("fontSize").value);
-      const buffer = parseInt(document.getElementById("buffer").value);
-      const gap = parseInt(document.getElementById("gap").value);
+      const center = elmCanvas.width / 2;
+      const fontSize = parseInt(document.getElementById("font-size").value);
+      const bufferSize = parseInt(document.getElementById("buffer-size").value);
+      const gapSize = parseInt(document.getElementById("gap-size").value);
 
       ctx.textAlign = "center";
       ctx.font = fontSize + 'px serif';
-      textArea.value.split('\n').forEach((line, i) => {
-        ctx.fillText(line, center, buffer + (i * (gap + fontSize)));
+      elmTextArea.value.split('\n').forEach((line, i) => {
+        ctx.fillText(line, center, bufferSize + (i * (gapSize + fontSize)));
       })
     }
 
     img.onload = paint;
-    img.src = url;
+    img.src = 'tombstone.jpg';
 
-    document.addEventListener('input', function(e){
+    document.addEventListener('input', e => {
       if (e.target.matches('input,textarea')) {
         e.stopPropagation();
         paint();
       }
     });
 
-    document.getElementById('save').addEventListener('click', () => {
-      var dt = cvas.toDataURL("image/png");
-      download.href = dt;
-      download.click();
+    document.getElementById('save-button').addEventListener('click', () => {
+      var dt = elmCanvas.toDataURL("image/png");
+      const elmDownload = document.getElementById("download-link");
+      elmDownload.href = dt;
+      elmDownload.click();
     });
 
   </script>
